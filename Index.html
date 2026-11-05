@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffe3f1">
+<title>دنیای یاسمین 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700&family=Vazirmatn:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>window.supabase||document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>')</script>
+<style>
+*{box-sizing:border-box;font-family:'Baloo Bhaijaan 2','Vazirmatn',sans-serif}
+body{margin:0;min-height:100vh;color:#5b4a6e;background:linear-gradient(135deg,#ffe3f1,#e8e0ff 50%,#d9f1ff);background-attachment:fixed;padding-bottom:96px}
+#bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+#bg span{position:absolute;bottom:-60px;opacity:.4;animation:fl linear infinite}
+@keyframes fl{to{transform:translateY(-120vh) rotate(40deg)}}
+header{position:relative;z-index:2;max-width:820px;margin:auto;padding:12px 14px 0;display:flex;justify-content:space-between;align-items:center;gap:8px}
+header h1{margin:0;font-size:22px;color:#ff7fb0}
+#pts{background:#fff;border-radius:99px;padding:6px 14px;box-shadow:0 4px 12px rgba(255,150,190,.3);font-size:14px}
+main{position:relative;z-index:1;max-width:820px;margin:auto;padding:10px 12px}
+.sect{display:flex;align-items:center;gap:10px}.sect h2{margin:0;color:#b27dd6}
+.ch{font-size:44px;animation:bob 2s ease-in-out infinite;display:inline-block}
+@keyframes bob{50%{transform:translateY(-6px) rotate(6deg)}}
+.card{background:rgba(255,255,255,.92);border-radius:24px;padding:14px;margin:10px 0;box-shadow:0 6px 18px rgba(255,150,190,.25)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}.grid .card{margin:0;text-align:center}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.big{font-size:52px;font-weight:700;color:#ff7fb0;line-height:1.1}
+.c{text-align:center}
+button{border:0;border-radius:99px;padding:8px 16px;background:#ff9ec4;color:#fff;cursor:pointer;font-size:15px;margin:3px}
+button:active{transform:scale(.95)}
+button.alt{background:#c9b6ff}
+input,select,textarea{border:2px solid #ffd0e3;border-radius:14px;padding:8px;background:#fff;color:#5b4a6e;font-size:15px;max-width:100%}
+label{display:block;margin:8px 0;font-size:14px}
+label input:not([type=checkbox]),label select,label textarea{width:100%;margin-top:4px}
+.chk{display:flex;align-items:center;gap:8px}
+.jp{display:flex;gap:6px;margin-top:4px}.jp select{flex:1;padding:8px 4px}
+.hint{font-size:12px;opacity:.7}
+.chips{margin:8px 0}.chips button{background:#f6ecff;color:#7a5c99}.chips button.on{background:#ff9ec4;color:#fff}
+.pb{height:12px;background:#f3e6ff;border-radius:99px;overflow:hidden}
+.pb i{display:block;height:100%;background:linear-gradient(90deg,#ff9ec4,#b69cff)}
+.bars{display:flex;gap:6px;align-items:flex-end;height:120px}.bars div{flex:1;text-align:center;font-size:10px}
+.bars i{display:block;background:linear-gradient(#ffb3d1,#c9b6ff);border-radius:10px 10px 4px 4px;min-height:4px;margin-bottom:4px}
+.task{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px dashed #ffd0e3;cursor:pointer}
+.task>span:first-child{flex:1}.acts button{padding:4px 10px;font-size:12px;background:#c9b6ff}
+table{width:100%;font-size:12px;border-collapse:collapse}td,th{padding:4px;border-bottom:1px solid #f3e6ff;text-align:center}
+.badge{background:#fff;color:#ff7fb0;border-radius:99px;padding:0 8px;margin-right:4px;font-weight:700}
+.od{background:#ffb58a}
+.drow{display:flex;gap:8px;background:rgba(255,255,255,.92);border-radius:20px;margin:8px 0;padding:8px;box-shadow:0 4px 12px rgba(255,150,190,.2)}
+.drow.today{outline:3px solid #ff9ec4}
+.dnm{flex:0 0 72px;text-align:center;display:flex;flex-direction:column;justify-content:center;background:#f6ecff;border-radius:14px;padding:6px;font-size:14px}
+.dnm small{font-size:11px;opacity:.75}
+.cells{flex:1;display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.cell{flex:0 0 120px;min-height:66px;background:#fff5fa;border:2px dashed #ffc2db;border-radius:14px;padding:6px;display:flex;gap:6px;align-items:flex-start}
+.cell.dn{background:#e8f9ef;border-color:#a6e3c0}.cell.dn b{text-decoration:line-through;opacity:.55}
+.cell span{flex:1;font-size:13px;cursor:pointer}.cell small{display:block;opacity:.7;font-size:11px}
+.cell input{width:20px;height:20px;accent-color:#ff7fb0;flex:0 0 auto}
+.addc{flex:0 0 44px;border-radius:14px;background:#f6ecff;color:#b27dd6;font-size:22px;margin:0;padding:0}
+.mg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.mh{text-align:center;font-size:12px;color:#b27dd6}
+.mc{min-height:54px;background:#fff5fa;border-radius:10px;padding:3px;text-align:center;font-size:12px;cursor:pointer;overflow:hidden}
+.mc.tdy{outline:2px solid #ff7fb0}.mc small{display:block;font-size:10px;line-height:1.2}
+.opt{background:#fff5fa;border-radius:12px;padding:8px;margin:6px 0}
+.lock{filter:grayscale(1);opacity:.45}
+.bd{display:inline-block;width:46%;margin:2%;text-align:center;vertical-align:top;font-size:12px}.bd b{font-size:34px;display:block}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:5;display:flex;justify-content:space-around;gap:4px;padding:8px;background:rgba(255,255,255,.96);border-radius:24px 24px 0 0;box-shadow:0 -4px 16px rgba(180,140,255,.25)}
+nav button{flex:1;background:#f6ecff;color:#7a5c99;display:flex;flex-direction:column;align-items:center;font-size:11px;border-radius:18px;padding:6px 2px;margin:0}
+nav button b{font-size:22px;font-weight:400}nav button.on{background:#ff9ec4;color:#fff}
+#toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:#fff;border-radius:20px;padding:10px 20px;box-shadow:0 6px 20px rgba(255,150,190,.5);z-index:99;opacity:0;transition:.3s;pointer-events:none;max-width:90%;text-align:center}
+#mo{position:fixed;inset:0;background:rgba(90,60,110,.45);z-index:50;display:none;align-items:flex-end;justify-content:center}
+#mo.on{display:flex}
+#mb{background:#fff;border-radius:26px 26px 0 0;width:100%;max-width:560px;max-height:88vh;overflow:auto;padding:18px}
+@media(min-width:600px){#mo{align-items:center}#mb{border-radius:26px}}
+#fx{display:none}.focus nav,.focus header,.focus #bg{display:none}.focus #fx{display:block;position:fixed;top:10px;left:10px;z-index:9}
+#login{position:relative;z-index:2;max-width:380px;margin:12vh auto;padding:12px}
+</style>
+</head>
+<body>
+<div id="bg"></div><div id="toast"></div>
+<div id="mo"><div id="mb"></div></div>
+<button id="fx" onclick="toggleFocus()">خروج از حالت تمرکز ✖️</button>
+
+<div id="login" style="display:none">
+ <div class="card c"><div class="ch" style="font-size:70px">🐰</div><h2 style="color:#ff7fb0">دنیای یاسمین 🌸</h2>
+ <label>ایمیل<input id="le" type="email" dir="ltr" autocomplete="username"></label>
+ <label>رمز<input id="lp" type="password" dir="ltr" autocomplete="current-password"></label>
+ <button onclick="login()">ورود 💖</button><p class="hint" id="lmsg"></p></div>
+</div>
+
+<div id="wrap" style="display:none">
+ <header><h1>دنیای یاسمین 🌸</h1><div id="pts">⭐ ۰</div></header>
+ <main id="app"></main>
+ <nav id="nav"></nav>
+</div>
+
+<script>
+// ================= تنظیمات =================
+const SB_URL='https://pgslacpkdhanzylahsaz.supabase.co';
+const SB_KEY='sb_publishable_8q4PurSj8hd8bOnsDu9m_Q_O4Qm_oIW';
+const sb=supabase.createClient(SB_URL,SB_KEY);
+const CFG={
+ names:{home:'خونه‌ی ابری',plan:'دفتر برنامه',subj:'باغ درس‌ها',timer:'قلعه‌ی تمرکز',more:'بیشتر',calc:'ماشین‌حساب درصد',exams:'تقویم آزمون‌ها',road:'مسیر کنکور',notes:'یادداشت‌های کوچولو',quests:'ماموریت‌ها',honors:'افتخارات',shop:'مغازه‌ی جایزه',love:'دنیای دونفره',panel:'پنل مدیر'},
+ chars:{home:'🐰',plan:'🐱',subj:'🐻',timer:'🐼',more:'🧸',calc:'🐹',exams:'🦊',road:'🐢',notes:'🦉',quests:'🐙',honors:'🦄',shop:'🐷',love:'💌',panel:'👑'}
+};
+const SUBJ={spec:['ریاضی و آمار','علوم و فنون ادبی','جامعه‌شناسی','روان‌شناسی','عربی','تاریخ','جغرافیا','فلسفه و منطق','اقتصاد'],gen:['فارسی','دین و زندگی','زبان انگلیسی','سلامت و بهداشت']};
+const ALL=[...SUBJ.spec,...SUBJ.gen];
+
+// ================= ابزارها =================
+const $=id=>document.getElementById(id);
+const fa=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+const fp=n=>fa((Math.round(n*10)/10).toString()).replace('.','٫');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let _tt;function toast(m){const t=$('toast');t.textContent=m;t.style.opacity=1;clearTimeout(_tt);_tt=setTimeout(()=>t.style.opacity=0,3200)}
+const sel=async p=>{const{data,error}=await p;if(error)throw error;return data};
+const cnt=async p=>{const{count,error}=await p;if(error)throw error;return count||0};
+async function fetchAll(mk){let out=[],f=0;for(;;){const d=await sel(mk().range(f,f+999));out=out.concat(d);if(d.length<1000)return out;f+=1000}}
+addEventListener('unhandledrejection',e=>{e.preventDefault();toast('خطا: '+((e.reason&&e.reason.message)||e.reason))});
+const fmtMin=m=>fa(Math.floor(m/60))+' ساعت و '+fa(m%60)+' دقیقه';
+const clock=s=>fa(String(Math.floor(s/60)).padStart(2,'0'))+':'+fa(String(s%60).padStart(2,'0'));
+function openM(h){$('mb').innerHTML=h;$('mo').classList.add('on')}
+function closeM(){$('mo').classList.remove('on')}
+$('mo').addEventListener('click',e=>{if(e.target.id=='mo')closeM()});
+
+// ================= تاریخ شمسی =================
+const DAY=864e5;
+const todayISO=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tehran',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+const pd=s=>new Date(s+'T12:00:00Z');
+const iso=d=>d.toISOString().slice(0,10);
+const addD=(s,n)=>iso(new Date(pd(s).getTime()+n*DAY));
+const diff=(a,b)=>Math.round((pd(a)-pd(b))/DAY);
+const JFm=new Intl.DateTimeFormat('en-US-u-ca-persian-nu-latn',{timeZone:'UTC',year:'numeric',month:'numeric',day:'numeric'});
+function J(s){const p=JFm.formatToParts(pd(s));const g=t=>+p.find(x=>x.type==t).value;return{y:g('year'),m:g('month'),d:g('day')}}
+function fromJ(y,m,d){
+ const off=(m<=6?(m-1)*31:186+(m-7)*30)+d-1;
+ let s=iso(new Date(Date.UTC(y+621,2,21,12)+off*DAY));
+ const t=(y*13+m)*32+d;
+ for(let i=0;i<8;i++){const j=J(s),k=(j.y*13+j.m)*32+j.d;if(k==t)return s;s=addD(s,k<t?1:-1)}
+ return s}
+function mlen(y,m){if(m<=6)return 31;if(m<=11)return 30;return J(addD(fromJ(y+1,1,1),-1)).d}
+const MN=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const WD=['شنبه','یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه'];
+const wdi=s=>(pd(s).getUTCDay()+1)%7;
+const jf=s=>{const j=J(s);return fa(j.d)+' '+MN[j.m-1]};
+const jff=s=>{const j=J(s);return fa(j.d)+' '+MN[j.m-1]+' '+fa(j.y)};
+function shiftM(s,k){const j=J(s);let m=j.m+k,y=j.y;while(m>12){m-=12;y++}while(m<1){m+=12;y--}return fromJ(y,m,1)}
+function jpick(id,s){s=s||todayISO();const j=J(s),cy=J(todayISO()).y,y0=Math.min(cy-1,j.y),y1=Math.max(cy+4,j.y);let ys='';for(let y=y0;y<=y1;y++)ys+=`<option value="${y}" ${y==j.y?'selected':''}>${fa(y)}</option>`;
+ return `<div class="jp"><select id="${id}_d">${Array.from({length:31},(_,i)=>`<option value="${i+1}" ${i+1==j.d?'selected':''}>${fa(i+1)}</option>`).join('')}</select><select id="${id}_m">${MN.map((n,i)=>`<option value="${i+1}" ${i+1==j.m?'selected':''}>${n}</option>`).join('')}</select><select id="${id}_y">${ys}</select></div>`}
+const getJ=id=>{const y=+$(id+'_y').value,m=+$(id+'_m').value;return fromJ(y,m,Math.min(+$(id+'_d').value,mlen(y,m)))};
+function mgrid(y,m,fn,click){const f=fromJ(y,m,1),n=mlen(y,m),off=wdi(f),td=todayISO();
+ let h='<div class="mg">'+['ش','ی','د','س','چ','پ','ج'].map(x=>`<div class="mh">${x}</div>`).join('');
+ for(let i=0;i<off;i++)h+='<div></div>';
+ for(let d=1;d<=n;d++){const s=addD(f,d-1);h+=`<div class="mc ${s==td?'tdy':''}" onclick="${click}('${s}')"><b>${fa(d)}</b>${fn(s)}</div>`}
+ return h+'</div>'}
+
+// ================= وضعیت کلی =================
+let me=null,uid=null,isA=false,EXAM='2027-07-03',cur='home',tok=0;
+const AC={};
+async function getPts(){return (await sel(sb.rpc('get_points',isA?{uid}:{})))||0}
+function refreshPts(){getPts().then(p=>$('pts').textContent='⭐ '+fa(p)).catch(()=>{})}
+async function checkBadges(){if(isA)return;try{const q=()=>cnt(sb.from('user_badges').select('badge_id',{count:'exact',head:true}).eq('user_id',uid));const b=await q();await sel(sb.rpc('refresh_badges'));const a=await q();if(a>b)toast('🏅 نشان جدید گرفتی! توی «افتخارات» ببینش')}catch(e){}}
+function lvInfo(p,lv){if(!lv.length)return{c:{name:'—',min_points:0},n:null};let c=lv[0],n=null;lv.forEach((l,i)=>{if(p>=l.min_points){c=l;n=lv[i+1]||null}});return{c,n}}
+const notice=t=>`<div class="card c">${t}</div>`;
+
+// ================= ورود =================
+function showLogin(msg){$('login').style.display='block';$('wrap').style.display='none';$('lmsg').textContent=msg||''}
+async function login(){
+ const email=$('le').value.trim(),password=$('lp').value;
+ if(!email||!password)return toast('ایمیل و رمز رو بنویس 🌷');
+ const{data,error}=await sb.auth.signInWithPassword({email,password});
+ if(error)return toast('ایمیل یا رمز اشتباهه');
+ await start(data.user)}
+async function logout(){await sb.auth.signOut();location.reload()}
+async function start(user){
+ const p=await sel(sb.from('profiles').select('*').eq('id',user.id).maybeSingle());
+ if(!p){await sb.auth.signOut();return showLogin('این حساب تعریف نشده')}
+ me=p;isA=p.role=='admin';
+ if(isA){const s=await sel(sb.from('profiles').select('id').eq('role','student').maybeSingle());uid=s&&s.id}else uid=user.id;
+ const st=await sel(sb.from('settings').select('*').eq('key','exam_date').maybeSingle());if(st&&st.value)EXAM=st.value;
+ $('login').style.display='none';$('wrap').style.display='block';
+ const keys=isA?['home','plan','panel','subj','more']:['home','plan','timer','subj','more'];
+ $('nav').innerHTML=keys.map(k=>`<button data-t="${k}" onclick="go('${k}')"><b>${CFG.chars[k]}</b>${CFG.names[k]}</button>`).join('');
+ go('home')}
+
+// ================= موتور صفحه‌ها =================
+const V={};
+async function go(t){cur=t;await render();scrollTo(0,0)}
+const head=()=>`<div class="sect"><span class="ch">${CFG.chars[cur]}</span><h2>${CFG.names[cur]}</h2></div>`;
+async function render(){
+ const my=++tok;$('app').innerHTML=head()+'<div class="card c">در حال بارگذاری... 🌸</div>';
+ try{const h=await V[cur]();if(my!=tok)return;$('app').innerHTML=head()+h}
+ catch(e){if(my==tok)$('app').innerHTML=head()+`<div class="card">یه مشکلی پیش اومد 😢<br><small>${esc(e.message||e)}</small><br><button onclick="render()">دوباره</button></div>`}
+ const ks=[...document.querySelectorAll('#nav button')].map(b=>b.dataset.t);
+ document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==(ks.includes(cur)?cur:'more')));
+ refreshPts()}
+
+// ================= خانه =================
+V.home=async()=>{
+ const td=todayISO(),w0=addD(td,-6);
+ const[logs,msg,over,ex,pts,st,tod,qs,lv]=await Promise.all([
+  sel(sb.from('study_logs').select('day,minutes').eq('user_id',uid).gte('day',w0)),
+  sel(sb.from('messages').select('body').lte('day',td).order('day',{ascending:false}).order('created_at',{ascending:false}).limit(1)),
+  cnt(sb.from('plan_items').select('id',{count:'exact',head:true}).eq('user_id',uid).eq('done',false).lt('day',td)),
+  sel(sb.from('exam_events').select('*').gte('day',td).lte('day',addD(td,7)).order('day')),
+  getPts(),sel(sb.rpc('calc_streak',{uid})),
+  sel(sb.from('plan_items').select('done').eq('user_id',uid).eq('day',td)),
+  sel(sb.from('quests').select('*').eq('kind','challenge').eq('active',true).neq('status','approved').order('created_at',{ascending:false}).limit(1)),
+  sel(sb.from('levels').select('*').order('min_points'))]);
+ checkBadges();
+ const dl=diff(EXAM,td),by={};logs.forEach(l=>by[l.day]=(by[l.day]||0)+l.minutes);
+ const wk=[];for(let i=6;i>=0;i--){const d=addD(td,i*-1);wk.push([WD[wdi(d)],by[d]||0])}
+ const ws=wk.reduce((a,b)=>a+b[1],0),mx=Math.max(60,...wk.map(x=>x[1])),{c,n}=lvInfo(pts,lv);
+ const pct=n?Math.round((pts-c.min_points)/(n.min_points-c.min_points)*100):100;
+ const tdone=tod.filter(x=>x.done).length;
+ if(ex.length&&localStorage.getItem('rem_'+td)!=='1'){localStorage.setItem('rem_'+td,'1');const e=ex[0],k=diff(e.day,td);toast('⏰ یادآوری: '+e.title+(k==0?' امروزه!':k==1?' فرداست!':' '+fa(k)+' روز دیگه‌ست'))}
+ return `${isA?'<div class="card hint c">داری خونه‌ی یاسمین رو می‌بینی 👀</div>':''}
+ <div class="card c"><div class="big">${fa(Math.max(dl,0))}</div><div>روز تا کنکور 🎀</div><small>${jff(EXAM)} · حدود ${fa(Math.round(Math.max(dl,0)/7))} هفته</small></div>
+ ${msg[0]?`<div class="card">💌 <b>پیام امروز:</b><p>${esc(msg[0].body)}</p></div>`:''}
+ ${ex.length?`<div class="card" style="background:#fff0e0">⏰ <b>آزمون‌های نزدیک</b>${ex.map(e=>{const k=diff(e.day,td);return `<p>${esc(e.title)} — ${k==0?'امروز':k==1?'فردا':fa(k)+' روز دیگه'} (${jf(e.day)})</p>`}).join('')}</div>`:''}
+ <div class="c">${over?`<button class="od" onclick="go('plan');setTimeout(overM,400)">⏰ کارهای عقب‌افتاده <span class="badge">${fa(over)}</span></button>`:'<small>🎉 هیچ کار عقب‌افتاده‌ای نیست</small>'}</div>
+ <div class="grid">
+  <div class="card">📖<br><b>امروز</b><br>${fmtMin(by[td]||0)}</div>
+  <div class="card">🗓️<br><b>این هفته</b><br>${fmtMin(ws)}</div>
+  <div class="card">🔥<br><b>استمرار</b><br>${fa(st)} روز</div>
+  <div class="card">✅<br><b>کارهای امروز</b><br>${fa(tdone)} از ${fa(tod.length)}</div></div>
+ <div class="card"><b>سطح: ${esc(c.name)}</b><div class="pb" style="margin:8px 0"><i style="width:${pct}%"></i></div><small>${n?`تا «${esc(n.name)}»: ${fa(n.min_points-pts)} امتیاز`:'به بالاترین سطح رسیدی! 👑'}</small></div>
+ ${qs[0]?`<div class="card">🎯 <b>چالش:</b> ${esc(qs[0].title)} <small>(${fa(qs[0].points)} امتیاز)</small></div>`:''}
+ <div class="card"><b>مطالعه‌ی ۷ روز اخیر</b><div class="bars">${wk.map(x=>`<div><i style="height:${Math.round(x[1]/mx*80)}px"></i>${x[0]}<br>${fa(x[1])}</div>`).join('')}</div><small>(دقیقه)</small></div>`};
+
+// ================= دفتر برنامه =================
+let pv='week',anc=null,ITEMS={},OVER=[];
+const subOpts=v=>`<select id="ms"><option value="">بدون درس</option>${ALL.map(s=>`<option ${s==v?'selected':''}>${s}</option>`).join('')}</select>`;
+function cell(i){ITEMS[i.id]=i;return `<div class="cell ${i.done?'dn':''}"><input type="checkbox" ${i.done?'checked':''} onchange="tick('${i.id}',this.checked)"><span onclick="itemM('${i.id}')"><b>${esc(i.title)}</b>${i.subject?`<small>${esc(i.subject)}</small>`:''}</span></div>`}
+function drow(d,items,td){return `<div class="drow ${d==td?'today':''}"><div class="dnm"><b>${WD[wdi(d)]}</b><small>${jf(d)}</small></div><div class="cells">${items.map(cell).join('')}<button class="addc" onclick="itemM(null,'${d}')">＋</button></div></div>`}
+V.plan=async()=>{
+ const td=todayISO();if(!anc)anc=td;let a,b,lab;
+ if(pv=='month'){const j=J(anc);a=fromJ(j.y,j.m,1);b=addD(a,mlen(j.y,j.m)-1);lab=MN[j.m-1]+' '+fa(j.y)}
+ else if(pv=='week'){a=addD(anc,-wdi(anc));b=addD(a,6);lab=jf(a)+' تا '+jf(b)}
+ else{a=b=anc;lab=WD[wdi(anc)]+' '+jff(anc)}
+ const[items,od]=await Promise.all([fetchAll(()=>sb.from('plan_items').select('*').eq('user_id',uid).gte('day',a).lte('day',b).order('created_at')),
+  cnt(sb.from('plan_items').select('id',{count:'exact',head:true}).eq('user_id',uid).eq('done',false).lt('day',td))]);
+ const by={};items.forEach(i=>(by[i.day]=by[i.day]||[]).push(i));
+ let body='';
+ if(pv=='month'){const j=J(anc);body='<div class="card">'+mgrid(j.y,j.m,s=>{const l=by[s]||[];return l.length?`<small>${fa(l.filter(x=>x.done).length)}/${fa(l.length)}</small>`:''},'pickDay')+'</div><p class="hint c">روی یه روز بزن تا دفتر همون هفته باز بشه</p>'}
+ else for(let i=0;i<(pv=='week'?7:1);i++){const d=addD(a,i);body+=drow(d,by[d]||[],td)}
+ const tabs=[['today','امروز'],['week','هفته'],['month','ماه']];
+ return `<div class="chips c">${tabs.map(t=>`<button class="${pv==t[0]?'on':''}" onclick="setPv('${t[0]}')">${t[1]}</button>`).join('')}<button class="od" onclick="overM()">⏰ عقب‌افتاده‌ها${od?`<span class="badge">${fa(od)}</span>`:''}</button></div>
+ <div class="c"><button class="alt" onclick="navP(-1)">▶</button><b>${lab}</b><button class="alt" onclick="navP(1)">◀</button></div>`+body};
+function setPv(v){pv=v;if(v=='today')anc=todayISO();render()}
+function navP(k){anc=pv=='month'?shiftM(anc,k):addD(anc,k*(pv=='week'?7:1));render()}
+function pickDay(s){pv='week';anc=s;render()}
+function itemM(id,day){const i=id?ITEMS[id]:null;
+ openM(`<h3>${i?'ویرایش کار':'کار جدید'}</h3><label>عنوان<input id="mt" value="${esc(i?i.title:'')}" placeholder="مثلاً: ۳۰ تست جامعه‌شناسی"></label><label>درس${subOpts(i&&i.subject)}</label><label>روز${jpick('md',i?i.day:day)}</label>
+ <div class="c"><button onclick="saveItem(${id?`'${id}'`:'null'})">ذخیره 💾</button>${i?`<button class="alt" onclick="moveItem('${id}',1)">بنداز فردا</button><button class="alt" onclick="delItem('${id}')">🗑</button>`:''}<button class="alt" onclick="closeM()">بستن</button></div>`)}
+async function saveItem(id){const title=$('mt').value.trim();if(!title)return toast('عنوان کار رو بنویس 🌷');const day=getJ('md'),subject=$('ms').value||null;
+ if(id)await sel(sb.from('plan_items').update({title,subject,day}).eq('id',id));else await sel(sb.from('plan_items').insert({user_id:uid,title,subject,day}));
+ closeM();render()}
+async function moveItem(id,n){await sel(sb.from('plan_items').update({day:addD(todayISO(),n)}).eq('id',id));closeM();render()}
+async function delItem(id){await sel(sb.from('plan_items').delete().eq('id',id));closeM();render()}
+async function tick(id,v){await sel(sb.from('plan_items').update({done:v}).eq('id',id));if(v){toast('آفرین! 🎉');checkBadges()}render()}
+async function overM(){const td=todayISO();OVER=await sel(sb.from('plan_items').select('*').eq('user_id',uid).eq('done',false).lt('day',td).order('day'));
+ openM(`<h3>⏰ کارهای عقب‌افتاده (${fa(OVER.length)})</h3>`+(OVER.length?OVER.map(i=>`<div class="task"><span><b>${esc(i.title)}</b><br><small>${i.subject?esc(i.subject)+' · ':''}${jf(i.day)}</small></span><span class="acts"><button onclick="mvOver('${i.id}',0)">امروز</button><button onclick="mvOver('${i.id}',1)">فردا</button></span></div>`).join('')+
+ `<p class="hint">تنظیم مجدد برنامه:</p><div class="c"><button onclick="spread(1)">همه امروز</button><button onclick="spread(2)">پخش روی ۲ روز</button><button onclick="spread(3)">پخش روی ۳ روز</button><button onclick="spread(5)">پخش روی ۵ روز</button></div>`:'<p class="c">هیچ کار عقب‌افتاده‌ای نیست 🎉</p>')+`<div class="c"><button class="alt" onclick="closeM()">بستن</button></div>`)}
+async function mvOver(id,n){await sel(sb.from('plan_items').update({day:addD(todayISO(),n)}).eq('id',id));await overM();if(cur=='plan'||cur=='home')render()}
+async function spread(n){const td=todayISO();await Promise.all(OVER.map((i,k)=>sb.from('plan_items').update({day:addD(td,k%n)}).eq('id',i.id)));closeM();toast('برنامه دوباره چیده شد ✨');render()}
+
+// ================= قلعه تمرکز =================
+let tm=JSON.parse(localStorage.getItem('yas_tm')||'null')||{mode:'study',len:{study:50,brk:10},left:3000,run:false,end:0,subj:ALL[0]};
+if(tm.run)tm.left=Math.max(0,Math.round((tm.end-Date.now())/1000));
+const saveTm=()=>localStorage.setItem('yas_tm',JSON.stringify(tm));
+const subSel=(id,v)=>`<select id="${id}">${ALL.map(s=>`<option ${s==v?'selected':''}>${s}</option>`).join('')}</select>`;
+V.timer=()=>{if(isA)return notice('این بخش مخصوص یاسمینه 🐼<br><small>ساعت مطالعه و تست‌هاش رو توی «گزارش» پنل مدیر می‌بینی</small>');
+ return `<div class="card c"><div class="big" id="tdisp">${clock(tm.left)}</div><div>${tm.mode=='study'?'وقت درس خوندنه 📖':'وقت استراحته ☕'}</div>
+ <p><select onchange="tm.subj=this.value;saveTm()">${ALL.map(s=>`<option ${s==tm.subj?'selected':''}>${s}</option>`).join('')}</select></p>
+ <button onclick="startT()">▶️ شروع</button><button onclick="pauseT()">⏸ توقف</button><button onclick="stopT()">⏹ پایان و ثبت</button><button class="alt" onclick="resetT()">🔄</button>
+ <p>مطالعه <input type="number" min="1" style="width:70px" value="${tm.len.study}" onchange="setLen('study',this.value)"> دقیقه · استراحت <input type="number" min="1" style="width:70px" value="${tm.len.brk}" onchange="setLen('brk',this.value)"> دقیقه</p>
+ <button onclick="toggleFocus()">🎯 حالت تمرکز</button></div>
+ <div class="card c"><b>✍️ ثبت دستی</b><br><small>اگه بدون تایمر درس خوندی</small><br><button onclick="logM(30,tm.subj)">ثبت مطالعه و تست</button></div>`};
+function startT(){if(tm.run)return;if(tm.left<=0)tm.left=(tm.mode=='study'?tm.len.study:tm.len.brk)*60;tm.end=Date.now()+tm.left*1000;tm.run=true;saveTm();toast('شروع شد! 💪')}
+function pauseT(){if(!tm.run)return;tm.left=Math.max(0,Math.round((tm.end-Date.now())/1000));tm.run=false;saveTm()}
+function resetT(){tm.run=false;tm.left=(tm.mode=='study'?tm.len.study:tm.len.brk)*60;saveTm();if(cur=='timer')render()}
+function setLen(m,v){tm.len[m]=Math.max(1,Math.floor(+v||1));if(!tm.run&&((m=='study')==(tm.mode=='study'))){tm.left=tm.len[m]*60;const d=$('tdisp');if(d)d.textContent=clock(tm.left)}saveTm()}
+function stopT(){pauseT();const el=tm.mode=='study'?Math.floor((tm.len.study*60-tm.left)/60):0;if(el<1){resetT();return toast('هنوز چیزی برای ثبت نیست')}logM(el,tm.subj);tm.mode='study';resetT()}
+function beep(){try{const c=new(window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator();o.connect(c.destination);o.frequency.value=880;o.start();setTimeout(()=>{o.stop();c.close()},600)}catch(e){}if(navigator.vibrate)navigator.vibrate([200,100,200])}
+function finishT(){tm.run=false;beep();
+ if(tm.mode=='study'){const m=tm.len.study;tm.mode='brk';tm.left=tm.len.brk*60;saveTm();logM(m,tm.subj,true)}
+ else{tm.mode='study';tm.left=tm.len.study*60;saveTm();toast('استراحت تموم شد، برگردیم سراغ درس 📖');if(cur=='timer')render()}}
+function logM(min,subj,ft){openM(`<h3>${ft?'🎉 آفرین! یه دوره مطالعه تموم شد':'✍️ ثبت مطالعه'}</h3><label>درس${subSel('ls',subj)}</label><label>دقیقه مطالعه<input id="lm" type="number" min="0" max="1440" value="${min}"></label><label>چند تا تست زدی؟<input id="lt" type="number" min="0" max="2000" value="0"></label><div class="c"><button onclick="saveLog()">ثبت ✅</button></div>`)}
+async function saveLog(){const m=Math.max(0,Math.min(1440,Math.floor(+$('lm').value||0))),t=Math.max(0,Math.min(2000,Math.floor(+$('lt').value||0)));
+ if(!m&&!t)return toast('دقیقه یا تست رو بنویس 🌷');
+ await sel(sb.from('study_logs').insert({user_id:uid,day:todayISO(),subject:$('ls').value,minutes:m,tests:t}));
+ closeM();toast('ثبت شد ✅');checkBadges();if(cur=='timer'||cur=='home')render()}
+function toggleFocus(){document.body.classList.toggle('focus');if(document.body.classList.contains('focus')&&cur!='timer')go('timer')}
+setInterval(()=>{if(!me||isA)return;if(tm.run){tm.left=Math.max(0,Math.round((tm.end-Date.now())/1000));const d=$('tdisp');if(d)d.textContent=clock(tm.left);if(tm.left<=0)finishT()}},500);
+
+// ================= باغ درس‌ها =================
+let EXR=[];
+function chartSvg(arr){
+ if(arr.length<2)return '<p class="c hint">برای نمودار، حداقل دو آزمون از این درس لازمه 🌷</p>';
+ const W=320,H=190,P=26,lo=Math.min(0,...arr.map(a=>+a.percent)),hi=100,span=diff(arr[arr.length-1].day,arr[0].day);
+ const X=(a,i)=>P+(span>0?diff(a.day,arr[0].day)/span:i/(arr.length-1))*(W-2*P),Y=v=>H-P-(v-lo)/(hi-lo)*(H-2*P);
+ const xs=arr.map(X),ys=arr.map(a=>Y(+a.percent));
+ let d=`M${xs[0]},${ys[0]}`;for(let i=0;i<xs.length-1;i++){const cx=(xs[i]+xs[i+1])/2;d+=` C${cx},${ys[i]} ${cx},${ys[i+1]} ${xs[i+1]},${ys[i+1]}`}
+ const g=[0,50,100].map(v=>`<line x1="${P}" x2="${W-P}" y1="${Y(v)}" y2="${Y(v)}" stroke="#f0dff5" stroke-dasharray="4"/><text x="4" y="${Y(v)+4}" font-size="10" fill="#b27dd6">${fa(v)}</text>`).join('');
+ return `<svg viewBox="0 0 ${W} ${H}" style="width:100%">${g}<path d="${d}" fill="none" stroke="#ff7fb0" stroke-width="3" stroke-linecap="round"/>${xs.map((x,i)=>`<circle cx="${x}" cy="${ys[i]}" r="4" fill="#b69cff"/>`).join('')}<text x="${P}" y="${H-6}" font-size="10" fill="#7a5c99">${jf(arr[0].day)}</text><text x="${W-P}" y="${H-6}" font-size="10" fill="#7a5c99" text-anchor="end">${jf(arr[arr.length-1].day)}</text></svg>`}
+function chartM(i){const s=ALL[i],a=EXR.filter(e=>e.subject==s);openM(`<h3>📈 مسیر ${esc(s)}</h3><p class="hint">درصد آزمون‌های ثبت‌شده در طول زمان</p>${chartSvg(a)}<div class="c"><button class="alt" onclick="closeM()">بستن</button></div>`)}
+V.subj=async()=>{
+ const[logs,ex,pl]=await Promise.all([fetchAll(()=>sb.from('study_logs').select('subject,minutes,tests').eq('user_id',uid).order('created_at')),
+  sel(sb.from('exam_results').select('subject,percent,day').eq('user_id',uid).order('day')),
+  fetchAll(()=>sb.from('plan_items').select('subject,done').eq('user_id',uid).not('subject','is',null).order('created_at'))]);
+ EXR=ex;
+ const g=(t,arr)=>`<h3>${t}</h3>`+arr.map(s=>{const i=ALL.indexOf(s),l=logs.filter(x=>x.subject==s),m=l.reduce((a,b)=>a+b.minutes,0),t=l.reduce((a,b)=>a+b.tests,0),p=pl.filter(x=>x.subject==s),pd_=p.filter(x=>x.done).length,e=ex.filter(x=>x.subject==s).slice(-3),
+  mas=e.length?Math.max(0,Math.min(100,e.reduce((a,b)=>a+ +b.percent,0)/e.length)):null;
+  return `<div class="card"><b>${s}</b> <button class="alt" style="float:left;padding:4px 10px;font-size:12px" onclick="chartM(${i})">📈 نمودار</button><br><small>⏱️ ${fmtMin(m)} · ✏️ ${fa(t)} تست · ✅ ${fa(pd_)} از ${fa(p.length)} کار برنامه</small>
+  <div style="margin-top:6px"><small>تسلط (از ۳ آزمون آخر): ${mas===null?'هنوز آزمونی ثبت نشده':fp(mas)+'٪'}</small><div class="pb"><i style="width:${mas||0}%"></i></div></div></div>`}).join('');
+ return '<p class="hint">پیشرفت و تسلط خودکار حساب می‌شن و لازم نیست چیزی وارد کنی ✨</p>'+g('📌 دروس اختصاصی',SUBJ.spec)+g('📘 دروس عمومی',SUBJ.gen)};
+
+// ================= ماشین‌حساب درصد =================
+V.calc=async()=>{
+ const rs=await sel(sb.from('exam_results').select('*').eq('user_id',uid).order('day',{ascending:false}).order('created_at',{ascending:false}).limit(15));
+ return `<div class="card"><label>عنوان آزمون<input id="ct" placeholder="مثلاً آزمون ۱۲ آذر"></label>
+ <label>درس<select id="cs"><option value="">ترکیبی / بدون درس</option>${ALL.map(s=>`<option>${s}</option>`).join('')}</select></label>
+ <div class="g3"><label>کل سوال<input id="ctot" type="number" min="1" oninput="calc()"></label><label>درست<input id="cc" type="number" min="0" oninput="calc()"></label><label>غلط<input id="cw" type="number" min="0" oninput="calc()"></label></div>
+ <div class="c"><div class="big" id="cp">۰٪</div><small id="cx">فرمول: ((درست − غلط÷۳) ÷ کل) × ۱۰۰</small></div>
+ ${isA?'':'<div class="c"><button onclick="saveEx()">ذخیره نتیجه 💾</button></div>'}</div>
+ <div class="card"><b>نتایج قبلی</b>${rs.length?`<table><tr><th>تاریخ</th><th>آزمون</th><th>درصد</th><th></th></tr>${rs.map(r=>`<tr><td>${jf(r.day)}</td><td>${esc(r.title)}${r.subject?'<br><small>'+esc(r.subject)+'</small>':''}</td><td>${fp(+r.percent)}٪</td><td>${isA?'':`<button class="alt" style="padding:2px 8px" onclick="delEx('${r.id}')">🗑</button>`}</td></tr>`).join('')}</table>`:'<p class="hint">هنوز چیزی ثبت نشده</p>'}</div>`};
+function calcVals(){return{t:+$('ctot').value||0,c:+$('cc').value||0,w:+$('cw').value||0}}
+function calc(){const{t,c,w}=calcVals();if(!t){$('cp').textContent='۰٪';return}
+ if(c+w>t){$('cp').textContent='؟';$('cx').textContent='جمع درست و غلط از کل سوال‌ها بیشتره!';return}
+ $('cp').textContent=fp((c-w/3)/t*100)+'٪';$('cx').textContent='بی‌پاسخ: '+fa(t-c-w)+' سوال'}
+async function saveEx(){const{t,c,w}=calcVals();if(t<1||c<0||w<0||c+w>t||!Number.isInteger(t)||!Number.isInteger(c)||!Number.isInteger(w))return toast('عددها درست نیستن 🌷');
+ await sel(sb.from('exam_results').insert({user_id:uid,day:todayISO(),title:$('ct').value.trim()||'آزمون',subject:$('cs').value||null,total:t,correct:c,wrong:w}));
+ toast('ثبت شد ✅');checkBadges();render()}
+async function delEx(id){if(!confirm('حذف بشه؟'))return;await sel(sb.from('exam_results').delete().eq('id',id));render()}
+
+// ================= ویرایشگر عمومی (برای پنل و تقویم‌ها) =================
+const MET=[['streak_days','روز استمرار'],['total_hours','کل ساعت مطالعه'],['total_tests','کل تست‌ها'],['tasks_done','کارهای انجام‌شده'],['exams_taken','تعداد آزمون ثبت‌شده'],['best_percent','بهترین درصد آزمون'],['points_earned','امتیاز کسب‌شده'],['manual','فقط دستی']];
+const SCH={
+ point_rules:{pk:'key',title:'قانون امتیاز',nodel:1,f:[{k:'title',l:'عنوان',r:1},{k:'points',l:'امتیاز',t:'num',r:1},{k:'unit',l:'به ازای هر چند واحد (مطالعه: دقیقه، تست: تعداد؛ کار و آزمون: ۱)',t:'num',r:1},{k:'threshold',l:'حداقل درصد (فقط آزمون)',t:'num'},{k:'active',l:'فعال',t:'bool'}]},
+ levels:{pk:'level_no',title:'سطح',f:[{k:'level_no',l:'شماره سطح',t:'num',ins:1,r:1},{k:'name',l:'اسم سطح',r:1},{k:'min_points',l:'امتیاز لازم',t:'num',r:1}]},
+ badges:{title:'نشان',ext:()=>({code:'b'+Date.now()}),f:[{k:'name',l:'اسم نشان',r:1},{k:'description',l:'توضیح'},{k:'icon',l:'ایموجی',d:'🏅'},{k:'metric',l:'شرط گرفتن',t:'sel',o:MET},{k:'threshold',l:'مقدار لازم',t:'num',r:1,d:1},{k:'active',l:'فعال',t:'bool',d:true}]},
+ rewards:{title:'جایزه',f:[{k:'name',l:'اسم جایزه',r:1},{k:'description',l:'توضیح'},{k:'cost',l:'قیمت (امتیاز)',t:'num',r:1},{k:'active',l:'فعال (قابل خرید)',t:'bool',d:true}]},
+ quests:{title:'ماموریت / چالش',f:[{k:'kind',l:'نوع',t:'sel',o:[['mission','ماموریت'],['challenge','چالش هفتگی']]},{k:'title',l:'عنوان',r:1},{k:'description',l:'توضیح',t:'area'},{k:'points',l:'امتیاز جایزه',t:'num',r:1,d:0},{k:'start_day',l:'شروع',t:'date'},{k:'end_day',l:'پایان',t:'date'},{k:'active',l:'فعال (دیده بشه)',t:'bool',d:true}]},
+ memories:{title:'خاطره',f:[{k:'title',l:'عنوان',r:1},{k:'body',l:'متن',t:'area'},{k:'day',l:'تاریخ',t:'date'},{k:'visible',l:'برای یاسمین نمایش داده بشه',t:'bool',d:false}]},
+ couple_events:{title:'مناسبت',f:[{k:'title',l:'عنوان',r:1},{k:'day',l:'تاریخ',t:'date'},{k:'repeat_yearly',l:'هر سال تکرار بشه',t:'bool',d:true},{k:'note',l:'یادداشت'},{k:'visible',l:'برای یاسمین نمایش داده بشه',t:'bool',d:true}]},
+ messages:{title:'پیام',f:[{k:'day',l:'روز نمایش',t:'date'},{k:'body',l:'متن پیام',t:'area',r:1}]},
+ exam_events:{title:'آزمون',f:[{k:'title',l:'عنوان',r:1},{k:'day',l:'تاریخ',t:'date'},{k:'institution',l:'مؤسسه'},{k:'subjects',l:'دروس / مباحث'},{k:'note',l:'یادداشت'}]},
+ roadmap:{title:'نقطه‌ی مسیر',f:[{k:'title',l:'عنوان',r:1},{k:'day',l:'تاریخ',t:'date'},{k:'note',l:'یادداشت'}]}
+};
+let EC=null;
+const cache=(t,rows)=>{AC[t]={};rows.forEach(r=>AC[t][r[SCH[t].pk||'id']]=r);return rows};
+function fld(f,v){const id='f_'+f.k;
+ if(f.t=='date')return `<label>${f.l}${jpick(id,v)}</label>`;
+ if(f.t=='bool')return `<label class="chk"><input type="checkbox" id="${id}" ${v?'checked':''}> ${f.l}</label>`;
+ if(f.t=='area')return `<label>${f.l}<textarea id="${id}" rows="4">${esc(v)}</textarea></label>`;
+ if(f.t=='sel')return `<label>${f.l}<select id="${id}">${f.o.map(o=>`<option value="${esc(o[0])}" ${o[0]==v?'selected':''}>${esc(o[1])}</option>`).join('')}</select></label>`;
+ return `<label>${f.l}<input id="${id}" type="${f.t=='num'?'number':'text'}" value="${esc(v)}"></label>`}
+function editM(t,id,defs){const s=SCH[t],r=id?AC[t][id]:null;EC={t,id};defs=defs||{};
+ openM(`<h3>${s.title}${id?'':' جدید'}</h3>`+s.f.filter(f=>!(f.ins&&id)).map(f=>fld(f,r?r[f.k]:(defs[f.k]!==undefined?defs[f.k]:f.d))).join('')+
+ `<div class="c"><button onclick="saveEdit()">ذخیره 💾</button>${id&&!s.nodel?`<button class="alt" onclick="delEdit()">🗑 حذف</button>`:''}<button class="alt" onclick="closeM()">بستن</button></div>`)}
+async function saveEdit(){const s=SCH[EC.t],o={};
+ for(const f of s.f){if(f.ins&&EC.id)continue;const el=$('f_'+f.k);let v;
+  if(f.t=='date')v=getJ('f_'+f.k);else if(f.t=='bool')v=el.checked;else if(f.t=='num')v=el.value===''?null:+el.value;else v=el.value.trim();
+  if(f.r&&(v===''||v===null||Number.isNaN(v)))return toast('«'+f.l+'» رو پر کن 🌷');o[f.k]=v}
+ if(s.ext&&!EC.id)Object.assign(o,s.ext());
+ if(EC.id)await sel(sb.from(EC.t).update(o).eq(s.pk||'id',EC.id));else await sel(sb.from(EC.t).insert(o));
+ closeM();toast('ذخیره شد ✅');render()}
+async function delEdit(){if(!confirm('حذف بشه؟'))return;await sel(sb.from(EC.t).delete().eq(SCH[EC.t].pk||'id',EC.id));closeM();render()}
+const lst=(t,rows,fn)=>rows.length?rows.map(r=>`<div class="task" onclick="editM('${t}','${r[SCH[t].pk||'id']}')"><span>${fn(r)}</span></div>`).join(''):'<p class="hint">هنوز چیزی نیست 🌷</p>';
+
+// ================= تقویم آزمون‌ها =================
+let eanc=null;
+V.exams=async()=>{const td=todayISO();if(!eanc)eanc=td;const j=J(eanc);
+ const rows=cache('exam_events',await sel(sb.from('exam_events').select('*').order('day')));const by={};rows.forEach(e=>(by[e.day]=by[e.day]||[]).push(e));
+ const up=rows.filter(e=>e.day>=td);
+ return `<div class="c"><button onclick="editM('exam_events',null,{day:'${td}'})">＋ آزمون جدید</button></div>
+ <div class="card"><div class="c"><button class="alt" onclick="eanc=shiftM(eanc,-1);render()">▶</button><b>${MN[j.m-1]} ${fa(j.y)}</b><button class="alt" onclick="eanc=shiftM(eanc,1);render()">◀</button></div>
+ ${mgrid(j.y,j.m,s=>(by[s]||[]).map(e=>`<small>🦊${esc(e.title)}</small>`).join(''),'exDay')}</div>
+ <div class="card"><b>آزمون‌های پیش‌رو</b>${up.length?up.map(e=>{const k=diff(e.day,td);return `<div class="task" onclick="editM('exam_events','${e.id}')"><span><b>${esc(e.title)}</b><br><small>${jff(e.day)} · ${k==0?'امروز':fa(k)+' روز دیگه'}${e.institution?' · '+esc(e.institution):''}${e.subjects?'<br>'+esc(e.subjects):''}</small></span></div>`}).join(''):'<p class="hint">آزمونی ثبت نشده 🌷</p>'}</div>`};
+function exDay(s){editM('exam_events',null,{day:s})}
+
+// ================= مسیر کنکور =================
+V.road=async()=>{const td=todayISO();
+ const[rm,ee]=await Promise.all([sub=>0,0]).then(()=>Promise.all([sel(sb.from('roadmap').select('*').order('day')),sel(sb.from('exam_events').select('*').gte('day',td).order('day'))]));
+ cache('roadmap',rm);cache('exam_events',ee);
+ const a=J(td),b=J(EXAM);let y=a.y,m=a.m,h='',guard=0;
+ while((y<b.y||(y==b.y&&m<=b.m))&&guard++<40){
+  const f=fromJ(y,m,1),l=addD(f,mlen(y,m)-1);
+  const it=[...rm.filter(r=>r.day>=f&&r.day<=l).map(r=>({d:r.day,t:'📍 '+r.title,n:r.note,e:`editM('roadmap','${r.id}')`})),
+   ...ee.filter(r=>r.day>=f&&r.day<=l).map(r=>({d:r.day,t:'🦊 '+r.title,n:r.institution,e:`editM('exam_events','${r.id}')`}))];
+  if(EXAM>=f&&EXAM<=l)it.push({d:EXAM,t:'🎯 روز کنکور!',e:''});
+  it.sort((p,q)=>p.d<q.d?-1:1);
+  const here=td>=f&&td<=l;
+  h+=`<div class="card" ${here?'style="outline:3px solid #ff9ec4"':''}><b>${MN[m-1]} ${fa(y)}</b> ${here?'<span class="badge">📍 الان اینجایی</span>':''}${here?`<div class="pb" style="margin:6px 0"><i style="width:${Math.round((diff(td,f)+1)/mlen(y,m)*100)}%"></i></div>`:''}
+  ${it.length?it.map(x=>`<div class="task" ${x.e?`onclick="${x.e}"`:''}><span><b>${esc(x.t)}</b> <small>${jf(x.d)}${x.n?' · '+esc(x.n):''}</small></span></div>`).join(''):'<small class="hint">چیزی ثبت نشده</small>'}</div>`;
+  m++;if(m>12){m=1;y++}}
+ const dl=diff(EXAM,td);
+ return `<div class="card c"><b>${fa(Math.max(dl,0))} روز</b> (حدود ${fa(Math.round(Math.max(dl,0)/7))} هفته) تا کنکور ${jff(EXAM)}<br><button onclick="editM('roadmap',null,{day:'${td}'})">＋ نقطه‌ی جدید توی مسیر</button></div>`+h};
+
+// ================= یادداشت =================
+V.notes=async()=>{if(isA)return notice('یادداشت‌ها مخصوص خود یاسمینه 🦉');
+ const ns=await sel(sb.from('notes').select('*').eq('user_id',uid).order('updated_at',{ascending:false}));window.NOTES={};ns.forEach(n=>NOTES[n.id]=n);
+ return `<div class="c"><button onclick="noteM()">＋ یادداشت جدید</button></div><div class="card">${ns.length?ns.map(n=>`<div class="task" onclick="noteM('${n.id}')"><span><b>${esc(n.title||'بدون عنوان')}</b><br><small>${esc((n.body||'').slice(0,80))}</small></span></div>`).join(''):'<p class="hint">هنوز یادداشتی نداری 🌷</p>'}</div>`};
+function noteM(id){const n=id?NOTES[id]:null;openM(`<h3>یادداشت</h3><label>عنوان<input id="nt" value="${esc(n?n.title:'')}"></label><label>متن<textarea id="nb" rows="10">${esc(n?n.body:'')}</textarea></label><div class="c"><button onclick="saveNote(${id?`'${id}'`:'null'})">ذخیره 💾</button>${id?`<button class="alt" onclick="delNote('${id}')">🗑</button>`:''}<button class="alt" onclick="closeM()">بستن</button></div>`)}
+async function saveNote(id){const o={title:$('nt').value.trim(),body:$('nb').value};
+ if(id)await sel(sb.from('notes').update({...o,updated_at:new Date().toISOString()}).eq('id',id));else await sel(sb.from('notes').insert({...o,user_id:uid}));closeM();render()}
+async function delNote(id){if(!confirm('حذف بشه؟'))return;await sel(sb.from('notes').delete().eq('id',id));closeM();render()}
+
+// ================= ماموریت‌ها =================
+function qcard(q){const st={open:'باز 🟡',submitted:'منتظر تأیید ⏳',approved:'انجام شد ✅'}[q.status];
+ return `<div class="card"><b>${q.kind=='challenge'?'🎯':'🗺️'} ${esc(q.title)}</b>${q.active?'':' <small>(غیرفعال)</small>'}<p>${esc(q.description||'')}</p><small>${fa(q.points)} امتیاز${q.end_day?' · تا '+jf(q.end_day):''} · ${st}</small><div>`+
+ (!isA&&q.status=='open'?`<button onclick="qAct('submit_quest','${q.id}')">انجامش دادم ✅</button>`:'')+
+ (isA?(q.status!='approved'?`<button onclick="qAct('approve_quest','${q.id}')">تأیید ✅</button>`:'')+(q.status!='open'?`<button class="alt" onclick="qAct('reject_quest','${q.id}')">برگردوندن</button>`:'')+`<button class="alt" onclick="editM('quests','${q.id}')">ویرایش</button>`:'')+`</div></div>`}
+async function qAct(fn,id){await sel(sb.rpc(fn,{qid:id}));toast('انجام شد 💖');checkBadges();render()}
+V.quests=async()=>{const qs=cache('quests',await sel(sb.from('quests').select('*').order('created_at',{ascending:false})));
+ const m=qs.filter(q=>q.kind=='mission'),c=qs.filter(q=>q.kind=='challenge');
+ return `<h3>🎯 چالش‌های هفتگی</h3>${c.length?c.map(qcard).join(''):'<div class="card hint c">فعلاً چالشی نیست</div>'}<h3>🗺️ ماموریت‌ها</h3>${m.length?m.map(qcard).join(''):'<div class="card hint c">فعلاً ماموریتی نیست</div>'}`};
+
+// ================= افتخارات =================
+V.honors=async()=>{await checkBadges();
+ const[lv,pts,rules,bd,ub,pe]=await Promise.all([sel(sb.from('levels').select('*').order('min_points')),getPts(),sel(sb.from('point_rules').select('*').eq('active',true).order('sort')),
+  sel(sb.from('badges').select('*').eq('active',true).order('sort')),sel(sb.from('user_badges').select('badge_id').eq('user_id',uid)),
+  sel(sb.from('point_events').select('*').eq('user_id',uid).order('created_at',{ascending:false}).limit(12))]);
+ const got=new Set(ub.map(x=>x.badge_id)),{c}=lvInfo(pts,lv);
+ const desc=r=>({study:`به ازای هر ${fa(r.unit)} دقیقه مطالعه`,tests:`به ازای هر ${fa(r.unit)} تست`,task:'انجام هر کار برنامه',exam_good:`آزمون با درصد ${fa(r.threshold||70)} یا بالاتر`}[r.key]||esc(r.title));
+ const lab={study:'مطالعه',tests:'تست',task:'کار برنامه',exam:'آزمون',quest:'ماموریت',purchase:'خرید جایزه',manual:'از طرف مدیر'};
+ return `<div class="card c"><div class="big">⭐ ${fa(pts)}</div><b>${esc(c.name)}</b></div>
+ <div class="card"><b>🪜 سطح‌ها</b>${lv.map(l=>`<div class="task"><span>${l.level_no==c.level_no?'👉 ':''}<b>${esc(l.name)}</b></span><span>${pts>=l.min_points?'✅':fa(l.min_points-pts)+' امتیاز مونده'} <small>(از ${fa(l.min_points)})</small></span></div>`).join('')}</div>
+ <div class="card"><b>📋 جدول کسب امتیاز</b>${rules.map(r=>`<div class="task"><span>${desc(r)}</span><span><b>+${fa(r.points)}</b></span></div>`).join('')}<p class="hint">ماموریت‌ها و چالش‌ها هم امتیاز جدا دارن.</p></div>
+ <div class="card"><b>🏅 نشان‌ها (${fa(got.size)} از ${fa(bd.length)})</b><br>${bd.map(b=>`<div class="bd ${got.has(b.id)?'':'lock'}"><b>${esc(b.icon)}</b>${esc(b.name)}<br><small>${esc(b.description||'')}</small></div>`).join('')}</div>
+ <div class="card"><b>🕓 آخرین امتیازها</b>${pe.length?pe.map(e=>`<div class="task"><span>${lab[e.rule_key]||e.rule_key}${e.note?' · '+esc(e.note):''}</span><span><b>${e.points>0?'+':''}${fa(e.points)}</b></span></div>`).join(''):'<p class="hint">هنوز امتیازی نیست</p>'}</div>`};
+
+// ================= مغازه =================
+V.shop=async()=>{
+ const[rw,pu,pts]=await Promise.all([sel(sb.from('rewards').select('*').eq('active',true).order('cost')),sel(sb.from('reward_purchases').select('*').eq('user_id',uid).order('created_at',{ascending:false}).limit(20)),getPts()]);
+ return `<div class="card c"><div class="big">⭐ ${fa(pts)}</div>امتیاز</div>
+ <div class="card"><b>🎁 جایزه‌ها</b>${rw.length?rw.map(r=>`<div class="task"><span><b>${esc(r.name)}</b><br><small>${esc(r.description||'')} · ${fa(r.cost)} امتیاز</small></span>${isA?'':`<span class="acts"><button onclick="buy('${r.id}')">بخر</button></span>`}</div>`).join(''):'<p class="hint">هنوز جایزه‌ای تعریف نشده 🌷</p>'}</div>
+ <div class="card"><b>🎀 خریدها</b>${pu.length?pu.map(p=>`<div class="task"><span>${esc(p.reward_name)} <small>(${fa(p.cost)})</small></span><span>${p.delivered?'✅ تحویل شد':'⏳'}</span></div>`).join(''):'<p class="hint">هنوز چیزی نخریدی</p>'}</div>`};
+async function buy(id){if(!confirm('مطمئنی؟'))return;try{await sel(sb.rpc('buy_reward',{rid:id}));toast('خریدی! 🎉');render()}catch(e){toast(String(e.message).includes('enough')?'امتیازت کافی نیست، ادامه بده 💪':'خطا: '+e.message)}}
+
+// ================= دنیای دونفره =================
+V.love=async()=>{const td=todayISO(),y=J(td).y;
+ const[ev,mem,ms]=await Promise.all([cache('couple_events',await sel(sb.from('couple_events').select('*'))),cache('memories',await sel(sb.from('memories').select('*').order('day',{ascending:false}))),sel(sb.from('messages').select('*').lte('day',td).order('day',{ascending:false}).limit(10))]);
+ const nx=ev.map(e=>{let d=e.day;if(e.repeat_yearly){const j=J(e.day);d=fromJ(y,j.m,Math.min(j.d,mlen(y,j.m)));if(d<td){const y2=y+1;d=fromJ(y2,j.m,Math.min(j.d,mlen(y2,j.m)))}}return{e,d}}).filter(x=>x.d>=td).sort((a,b)=>a.d<b.d?-1:1);
+ return `<div class="card"><b>💞 مناسبت‌های ما</b>${nx.length?nx.map(x=>{const k=diff(x.d,td);return `<div class="task"><span><b>${esc(x.e.title)}</b>${isA&&!x.e.visible?' 🙈':''}<br><small>${jff(x.d)}${x.e.note?' · '+esc(x.e.note):''}</small></span><span>${k==0?'امروزه 🎉':fa(k)+' روز'}</span></div>`}).join(''):'<p class="hint">هنوز مناسبتی ثبت نشده</p>'}</div>
+ <div class="card"><b>📸 خاطره‌ها</b>${mem.length?mem.map(m=>`<div class="opt"><b>${esc(m.title)}</b>${isA&&!m.visible?' 🙈':''} <small>${jff(m.day)}</small><p>${esc(m.body||'')}</p></div>`).join(''):'<p class="hint">هنوز خاطره‌ای نیست</p>'}</div>
+ <div class="card"><b>💌 پیام‌های قبلی</b>${ms.map(m=>`<p><small>${jf(m.day)}</small><br>${esc(m.body)}</p>`).join('')||'<p class="hint">هنوز پیامی نیست</p>'}</div>`};
+
+// ================= بیشتر =================
+V.more=()=>{const k=['calc','exams','road','notes','quests','honors','shop','love'];if(isA)k.push('panel');
+ return `<div class="grid">${k.map(x=>`<div class="card" onclick="go('${x}')" style="cursor:pointer"><div class="ch" style="font-size:40px">${CFG.chars[x]}</div><br><b>${CFG.names[x]}</b></div>`).join('')}</div><div class="c"><button class="alt" onclick="logout()">🚪 خروج</button></div>`};
+
+// ================= پنل مدیر =================
+let pt='report';
+async function report(){const td=todayISO();
+ const[logs,pl,exr,pts,st]=await Promise.all([fetchAll(()=>sb.from('study_logs').select('day,subject,minutes,tests').eq('user_id',uid).order('created_at')),fetchAll(()=>sb.from('plan_items').select('subject,done').eq('user_id',uid).order('created_at')),
+  sel(sb.from('exam_results').select('*').eq('user_id',uid).order('day',{ascending:false}).limit(8)),getPts(),sel(sb.rpc('calc_streak',{uid}))]);
+ const by={};logs.forEach(l=>by[l.day]=(by[l.day]||0)+l.minutes);
+ const tot=logs.reduce((a,b)=>a+b.minutes,0),tests=logs.reduce((a,b)=>a+b.tests,0),dn=pl.filter(x=>x.done).length;
+ const wk=[];for(let i=13;i>=0;i--){const d=addD(td,-i);wk.push([fa(J(d).d),by[d]||0])}const mx=Math.max(60,...wk.map(x=>x[1]));
+ return `<div class="card"><b>📊 گزارش یاسمین</b><p>امروز: ${fmtMin(by[td]||0)}<br>کل مطالعه: ${fmtMin(tot)}<br>کل تست: ${fa(tests)}<br>کارها: ${fa(dn)} از ${fa(pl.length)}<br>استمرار: ${fa(st)} روز · امتیاز: ${fa(pts)}</p></div>
+ <div class="card"><b>۱۴ روز اخیر (دقیقه)</b><div class="bars">${wk.map(x=>`<div><i style="height:${Math.round(x[1]/mx*80)}px"></i>${x[0]}</div>`).join('')}</div></div>
+ <div class="card"><table><tr><th>درس</th><th>ساعت</th><th>تست</th><th>کار</th></tr>${ALL.map(s=>{const l=logs.filter(x=>x.subject==s),p=pl.filter(x=>x.subject==s);return `<tr><td>${s}</td><td>${fa(Math.round(l.reduce((a,b)=>a+b.minutes,0)/6)/10)}</td><td>${fa(l.reduce((a,b)=>a+b.tests,0))}</td><td>${fa(p.filter(x=>x.done).length)}/${fa(p.length)}</td></tr>`}).join('')}</table></div>
+ <div class="card"><b>آخرین آزمون‌ها</b>${exr.length?exr.map(r=>`<p>${jf(r.day)} · ${esc(r.title)}${r.subject?' ('+esc(r.subject)+')':''} → <b>${fp(+r.percent)}٪</b></p>`).join(''):'<p class="hint">هنوز آزمونی ثبت نشده</p>'}</div>`}
+const PT={
+ report,
+ msg:async()=>{const r=cache('messages',await sel(sb.from('messages').select('*').order('day',{ascending:false}).limit(20)));
+  return `<div class="c"><button onclick="editM('messages')">＋ پیام جدید</button></div><div class="card">${lst('messages',r,x=>`${jf(x.day)} — ${esc(x.body)}`)}</div>`},
+ points:async()=>{const[rules,lv,pts]=await Promise.all([sel(sb.from('point_rules').select('*').order('sort')),sel(sb.from('levels').select('*').order('min_points')),getPts()]);cache('point_rules',rules);cache('levels',lv);
+  return `<div class="card c"><div class="big">⭐ ${fa(pts)}</div><button onclick="manualM()">➕➖ امتیاز دستی</button></div>
+  <div class="card"><b>📋 جدول کسب امتیاز</b><p class="hint">هر ردیف رو بزن تا ویرایش بشه.</p>${lst('point_rules',rules,r=>`${esc(r.title)} — <b>${fa(r.points)}</b> امتیاز ${r.active?'':'(غیرفعال)'}`)}</div>
+  <div class="card"><b>🪜 سطح‌ها</b> <button onclick="editM('levels')">＋</button>${lst('levels',lv,r=>`${fa(r.level_no)}. ${esc(r.name)} — از ${fa(r.min_points)}`)}</div>`},
+ badges:async()=>{const r=cache('badges',await sel(sb.from('badges').select('*').order('sort')));
+  return `<div class="c"><button onclick="editM('badges')">＋ نشان جدید</button><button class="alt" onclick="awardM()">🎖 اهدای دستی</button></div><div class="card">${lst('badges',r,b=>`${esc(b.icon)} <b>${esc(b.name)}</b> <small>${esc(b.description||'')}${b.active?'':' (غیرفعال)'}</small>`)}</div>`},
+ rewards:async()=>{const[r,pu]=await Promise.all([sel(sb.from('rewards').select('*').order('cost')),sel(sb.from('reward_purchases').select('*').eq('user_id',uid).order('created_at',{ascending:false}).limit(20))]);cache('rewards',r);
+  return `<div class="c"><button onclick="editM('rewards')">＋ جایزه‌ی جدید</button></div><div class="card"><b>🎁 جایزه‌ها</b>${lst('rewards',r,x=>`<b>${esc(x.name)}</b> — ${fa(x.cost)} امتیاز${x.active?'':' (غیرفعال)'}`)}</div>
+  <div class="card"><b>🛍 خریدهای یاسمین</b>${pu.length?pu.map(p=>`<div class="task"><span>${esc(p.reward_name)} <small>${jf(p.created_at.slice(0,10))}</small></span>${p.delivered?'<span>✅</span>':`<span class="acts"><button onclick="deliver('${p.id}')">تحویل دادم</button></span>`}</div>`).join(''):'<p class="hint">هنوز خریدی نشده</p>'}</div>`},
+ quests:async()=>{const r=cache('quests',await sel(sb.from('quests').select('*').order('created_at',{ascending:false})));const td=todayISO();
+  return `<div class="c"><button onclick="editM('quests',null,{kind:'mission',start_day:'${td}',end_day:'${addD(td,7)}'})">＋ ماموریت</button><button class="alt" onclick="editM('quests',null,{kind:'challenge',start_day:'${td}',end_day:'${addD(td,7)}'})">＋ چالش هفتگی</button></div>${r.map(qcard).join('')||'<div class="card hint c">هنوز چیزی نیست</div>'}`},
+ mem:async()=>{const r=cache('memories',await sel(sb.from('memories').select('*').order('day',{ascending:false})));
+  return `<div class="c"><button onclick="editM('memories')">＋ خاطره‌ی جدید</button></div><div class="card">${lst('memories',r,m=>`${m.visible?'👁':'🙈'} <b>${esc(m.title)}</b> <small>${jf(m.day)}</small>`)}</div>`},
+ couple:async()=>{const r=cache('couple_events',await sel(sb.from('couple_events').select('*').order('day')));
+  return `<div class="c"><button onclick="editM('couple_events')">＋ مناسبت جدید</button></div><div class="card">${lst('couple_events',r,e=>`${e.visible?'👁':'🙈'} <b>${esc(e.title)}</b> <small>${jff(e.day)}${e.repeat_yearly?' · هر سال':''}</small>`)}</div>`},
+ set:()=>`<div class="card"><b>📅 تاریخ کنکور</b>${jpick('ex',EXAM)}<div class="c"><button onclick="saveExam()">ذخیره</button></div></div><div class="card c"><button class="alt" onclick="logout()">🚪 خروج</button></div>`
+};
+V.panel=async()=>{if(!isA)return notice('اینجا مخصوص مدیره 🔒');
+ const tabs=[['report','📊 گزارش'],['msg','💌 پیام'],['points','⭐ امتیاز و سطح'],['badges','🏅 نشان‌ها'],['rewards','🎁 جایزه‌ها'],['quests','🎯 ماموریت و چالش'],['mem','📸 خاطرات'],['couple','💞 مناسبت‌ها'],['set','⚙️ تنظیمات']];
+ return `<div class="chips c">${tabs.map(t=>`<button class="${pt==t[0]?'on':''}" onclick="pt='${t[0]}';render()">${t[1]}</button>`).join('')}</div>`+await PT[pt]()};
+function manualM(){openM(`<h3>امتیاز دستی</h3><label>مقدار (مثبت یا منفی)<input id="mp" type="number" placeholder="مثلاً 20 یا -10"></label><label>دلیل<input id="mn"></label><div class="c"><button onclick="saveManual()">اعمال</button><button class="alt" onclick="closeM()">بستن</button></div>`)}
+async function saveManual(){const p=Math.floor(+$('mp').value);if(!p)return toast('یه عدد بنویس');await sel(sb.from('point_events').insert({user_id:uid,rule_key:'manual',points:p,note:$('mn').value.trim().slice(0,100)}));closeM();toast('انجام شد ⭐');render()}
+async function awardM(){const b=await sel(sb.from('badges').select('id,name,icon').order('sort'));openM(`<h3>اهدای نشان</h3><label>نشان<select id="ab">${b.map(x=>`<option value="${x.id}">${esc(x.icon)} ${esc(x.name)}</option>`).join('')}</select></label><div class="c"><button onclick="saveAward()">اهدا کن 🎖</button><button class="alt" onclick="closeM()">بستن</button></div>`)}
+async function saveAward(){await sel(sb.from('user_badges').upsert({user_id:uid,badge_id:$('ab').value}));closeM();toast('اهدا شد 🎖');render()}
+async function deliver(id){await sel(sb.from('reward_purchases').update({delivered:true}).eq('id',id));render()}
+async function saveExam(){const d=getJ('ex');await sel(sb.from('settings').upsert({key:'exam_date',value:d}));EXAM=d;toast('تاریخ کنکور ذخیره شد ✅')}
+
+// ================= شروع =================
+$('bg').innerHTML=Array.from({length:14},(_,i)=>`<span style="left:${Math.random()*100}%;font-size:${20+Math.random()*24}px;animation-duration:${14+Math.random()*16}s;animation-delay:-${Math.random()*20}s">${['🌸','⭐','☁️','💖','🎀','✨','🍓'][i%7]}</span>`).join('');
+document.addEventListener('keydown',e=>{if(e.key=='Enter'&&$('login').style.display=='block')login()});
+(async()=>{try{const{data:{session}}=await sb.auth.getSession();if(session)await start(session.user);else showLogin()}catch(e){showLogin('مشکل در اتصال: '+(e.message||e))}})();
+</script>
+</body>
+  </html>
