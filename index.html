@@ -529,21 +529,3 @@ if(!m){m=document.createElement('meta');m.name='apple-mobile-web-app-title';docu
 m.content=N;
 })();
 </script>
-<script>
-(function(){
-var st=document.createElement('style');
-st.textContent='html.dk{filter:invert(1) hue-rotate(180deg);background:#fff}html.dk img,html.dk video,html.dk canvas{filter:invert(1) hue-rotate(180deg)}.dkb{position:fixed;left:14px;z-index:9999;border:0;border-radius:999px;font-weight:bold;box-shadow:0 4px 12px #0003;font-family:inherit;text-decoration:none;cursor:pointer}';
-document.head.appendChild(st);
-var root=document.documentElement;
-if(localStorage.getItem('dark')==='1')root.classList.add('dk');
-var a=document.createElement('a');
-a.href='love.html';a.className='dkb';
-a.style.cssText='bottom:90px;background:#ff8fb8;color:#fff;padding:12px 18px';
-a.textContent='💞 دخملی و بابایی';
-var b=document.createElement('button');
-b.className='dkb';b.textContent='🌙';
-b.style.cssText='bottom:146px;background:#fff;color:#333;padding:10px 14px;font-size:18px';
-b.onclick=function(){var d=root.classList.toggle('dk');localStorage.setItem('dark',d?'1':'0');};
-document.body.appendChild(a);document.body.appendChild(b);
-})();
-</script>
