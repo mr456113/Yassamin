@@ -517,3 +517,15 @@ new MutationObserver(function(){clearTimeout(t);t=setTimeout(fix,50);}).observe(
 fix();
 })();
 </script>
+<script>
+(function(){
+var N='دخملی بابایی 🎀';
+function t(){if(document.title!==N)document.title=N;}
+t();
+var el=document.querySelector('title');
+if(el)new MutationObserver(t).observe(el,{childList:true,characterData:true,subtree:true});
+var m=document.querySelector('meta[name="apple-mobile-web-app-title"]');
+if(!m){m=document.createElement('meta');m.name='apple-mobile-web-app-title';document.head.appendChild(m);}
+m.content=N;
+})();
+</script>
