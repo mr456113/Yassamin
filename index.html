@@ -498,3 +498,22 @@ document.addEventListener('keydown',e=>{if(e.key=='Enter'&&$('login').style.disp
 </script>
 </body>
   </html>
+<script>
+(function(){
+var R=[[/خونه[\s\u200c]*(ی[\s\u200c]*)?ابری/g,'خونه‌ی عشق'],[/دنیای[\s\u200c]*دو[\s\u200c]*نفره/g,'دخملی و بابایی']];
+function fix(){
+var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),n;
+while(n=w.nextNode()){
+var p=n.parentNode&&n.parentNode.nodeName;
+if(p==='SCRIPT'||p==='STYLE'||p==='TEXTAREA')continue;
+var v=n.nodeValue;
+R.forEach(function(r){v=v.replace(r[0],r[1]);});
+if(v!==n.nodeValue)n.nodeValue=v;
+}
+R.forEach(function(r){document.title=document.title.replace(r[0],r[1]);});
+}
+var t;
+new MutationObserver(function(){clearTimeout(t);t=setTimeout(fix,50);}).observe(document.body,{childList:true,subtree:true,characterData:true});
+fix();
+})();
+</script>
